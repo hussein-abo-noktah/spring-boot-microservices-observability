@@ -6,6 +6,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/discovery/.mvn/wrapper
+!**/customer/.mvn/wrapper
 !**/config-server/.mvn/wrapper
 
 ### STS ###

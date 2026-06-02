@@ -1,0 +1,16 @@
+spring:
+  mongodb:
+    username: root
+    password: secret
+    host: mongodb
+    port: 27017
+    database: customers
+    authentication-database: admin
+
+server:
+  port: 8090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka}
