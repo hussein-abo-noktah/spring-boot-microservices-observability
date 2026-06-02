@@ -1,5 +1,6 @@
 services:
 
+
   config-server:
     container_name: ms_config-server
     build:
@@ -8,6 +9,19 @@ services:
     restart: unless-stopped
     ports:
       - "8888:8888"
+    networks:
+      - microservices-observability-net
+
+  discovery-server:
+    container_name: ms_discovery-server
+    build:
+      context: ./services/discovery
+      dockerfile: ../../docker/discovery/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
     networks:
       - microservices-observability-net
 
