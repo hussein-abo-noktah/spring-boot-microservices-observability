@@ -1,4 +1,17 @@
 services:
+
+  config-server:
+    container_name: ms_config-server
+    build:
+      context: ./services/config-server
+      dockerfile: ../../docker/config/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    networks:
+      - microservices-observability-net
+
+
   postgresql:
     container_name: ms_postgresql
     image: postgres:18.4
@@ -64,8 +77,6 @@ services:
       - microservices-observability-net
     depends_on:
       - mongodb
-
-
 
 networks:
   microservices-observability-net:
