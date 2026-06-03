@@ -66,6 +66,23 @@ services:
         condition: service_started
     networks:
       - microservices-observability-net
+  order-service:
+    container_name: ms_order-service
+    build:
+      context: ./services/order
+      dockerfile: ../../docker/order/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8070:8070"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+    networks:
+      - microservices-observability-net
 
 
   postgresql:
