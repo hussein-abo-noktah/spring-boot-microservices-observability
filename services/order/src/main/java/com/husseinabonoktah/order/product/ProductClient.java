@@ -22,7 +22,7 @@ public class ProductClient {
 
     private final RestClient restClient;
 
-    public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> request) {
+    public void purchaseProducts(List<PurchaseRequest> request) {
         ResponseEntity<List<PurchaseResponse>> responseEntity = restClient
                 .post()
                 .uri(productUrl + "/purchase")
@@ -33,6 +33,5 @@ public class ProductClient {
         if (responseEntity.getStatusCode().isError()) {
             throw new BusinessException("An error occurred while processing the products purchase: " + responseEntity.getStatusCode());
         }
-        return responseEntity.getBody();
     }
 }

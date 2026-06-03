@@ -16,4 +16,4 @@ eureka:
       defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka}
 
 server:
-  port: 8063
+  port: 8092

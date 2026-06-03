@@ -5,6 +5,8 @@ import com.husseinabonoktah.order.customer.CustomerServiceClient;
 import com.husseinabonoktah.order.exception.BusinessException;
 import com.husseinabonoktah.order.orderitem.OrderItemRequest;
 import com.husseinabonoktah.order.orderitem.OrderItemService;
+import com.husseinabonoktah.order.payment.PaymentRequest;
+import com.husseinabonoktah.order.payment.PaymentServiceClient;
 import com.husseinabonoktah.order.product.ProductClient;
 import com.husseinabonoktah.order.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +25,7 @@ public class OrderService {
     private final OrderRepository repository;
     private final OrderMapper mapper;
     private final CustomerServiceClient customerClient;
+    private final PaymentServiceClient paymentClient;
     private final ProductClient productClient;
     private final OrderItemService orderItemService;
 
@@ -31,7 +34,7 @@ public class OrderService {
         var customer = this.customerClient.findById(request.customerId())
                 .orElseThrow(() -> new BusinessException("Cannot create order:: No customer exists with the provided ID"));
 
-        var purchasedProducts = productClient.purchaseProducts(request.products());
+        productClient.purchaseProducts(request.products());
 
         var order = this.repository.save(mapper.toOrder(request));
 
@@ -47,6 +50,14 @@ public class OrderService {
         }
         // add payment requests
 
+        var paymentRequest = new PaymentRequest(
+                request.amount(),
+                request.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
         return order.getId();
     }
 
