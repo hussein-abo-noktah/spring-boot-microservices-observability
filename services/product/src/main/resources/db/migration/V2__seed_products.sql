@@ -1,3 +1,29 @@
+CREATE SEQUENCE IF NOT EXISTS category_id_seq START WITH 1 INCREMENT BY 1;
+
+ALTER SEQUENCE category_id_seq OWNED BY category.id;
+
+ALTER TABLE category
+    ALTER COLUMN id SET DEFAULT nextval('category_id_seq');
+
+SELECT setval(
+    'category_id_seq',
+    COALESCE((SELECT MAX(id) FROM category), 0) + 1,
+    false
+);
+
+CREATE SEQUENCE IF NOT EXISTS product_id_seq START WITH 1 INCREMENT BY 1;
+
+ALTER SEQUENCE product_id_seq OWNED BY product.id;
+
+ALTER TABLE product
+    ALTER COLUMN id SET DEFAULT nextval('product_id_seq');
+
+SELECT setval(
+    'product_id_seq',
+    COALESCE((SELECT MAX(id) FROM product), 0) + 1,
+    false
+);
+
 INSERT INTO category (name, description)
 SELECT 'Electronics', 'Devices and accessories used for day to day testing'
 WHERE NOT EXISTS (
