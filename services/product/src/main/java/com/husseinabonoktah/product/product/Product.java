@@ -12,16 +12,26 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
+@Table(name = "product")
 public class Product {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "available_quantity", nullable = false)
     private double availableQuantity;
+
+    @Column(name = "price", nullable = false, precision = 38, scale = 2)
     private BigDecimal price;
+
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
