@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "order_ites")
+@Table(name = "order_items")
 public class OrderItem {
 
     @Id
