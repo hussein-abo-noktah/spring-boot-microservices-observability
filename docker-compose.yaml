@@ -32,6 +32,25 @@ services:
     networks:
       - microservices-observability-net
 
+  gateway-service:
+    container_name: ms_gateway-service
+    build:
+      context: ./services/gateway
+      dockerfile: ../../docker/gateway/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8333:8333"
+    depends_on:
+      config-server:
+        condition: service_healthy
+
+      discovery-service:
+        condition: service_started
+
+    networks:
+      - microservices-observability-net
+
+
   customer-service:
     container_name: ms_customer-service
     build:
