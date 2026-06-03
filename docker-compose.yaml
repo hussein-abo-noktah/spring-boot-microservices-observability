@@ -49,6 +49,23 @@ services:
         condition: service_started
     networks:
       - microservices-observability-net
+  product-service:
+    container_name: ms_product-service
+    build:
+      context: ./services/product
+      dockerfile: ../../docker/product/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8063:8063"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+    networks:
+      - microservices-observability-net
 
 
   postgresql:
@@ -57,12 +74,17 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: microservices
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     networks:
       - microservices-observability-net
     restart: unless-stopped

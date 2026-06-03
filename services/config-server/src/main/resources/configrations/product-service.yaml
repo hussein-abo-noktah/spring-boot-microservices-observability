@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/product
+    username: root
+    password: secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: false
+    enabled: false
+server:
+  port: 8063
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka}
