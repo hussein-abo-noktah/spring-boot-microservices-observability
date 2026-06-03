@@ -66,6 +66,8 @@ services:
         condition: service_started
     networks:
       - microservices-observability-net
+
+
   order-service:
     container_name: ms_order-service
     build:
@@ -84,6 +86,23 @@ services:
     networks:
       - microservices-observability-net
 
+  payment-service:
+    container_name: ms_payment-service
+    build:
+      context: ./services/payment
+      dockerfile: ../../docker/payment/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8092:8092"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      postgresql:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - microservices-observability-net
 
   postgresql:
     container_name: ms_postgresql

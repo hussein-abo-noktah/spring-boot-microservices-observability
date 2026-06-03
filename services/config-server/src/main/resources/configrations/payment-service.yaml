@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/payment
+    username: root
+    password: secret
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka}
+
+server:
+  port: 8063

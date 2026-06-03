@@ -8,6 +8,7 @@ target/
 !**/discovery/.mvn/wrapper
 !**/customer/.mvn/wrapper
 !**/product/.mvn/wrapper
+!**/payment/.mvn/wrapper
 !**/config-server/.mvn/wrapper
 
 ### STS ###

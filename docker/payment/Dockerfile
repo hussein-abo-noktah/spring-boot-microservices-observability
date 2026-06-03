@@ -13,8 +13,8 @@ FROM eclipse-temurin:26-jre-alpine
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar payment.jar
+COPY --from=build /app/target/*.jar product.jar
 
-EXPOSE 8092
+EXPOSE 8063
 
-ENTRYPOINT ["java", "-jar", "payment.jar"]
+ENTRYPOINT ["java", "-jar", "product.jar"]
