@@ -4,9 +4,6 @@ spring:
   config:
     import: optional:configserver:http://config-server:8888/
 
-application:
-  config:
-    customer-url: http://customer-service:8090/
-    product-url: http://product-service:8063/
+
 
 
