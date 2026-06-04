@@ -11,6 +11,7 @@ So far, the services are created and Prometheus is integrated to collect metrics
 - Gateway Service
 - Customer, Product, Order, and Payment services
 - Prometheus
+- Grafana
 - PostgreSQL and MongoDB
 
 ## Observability Status
@@ -19,12 +20,38 @@ So far, the services are created and Prometheus is integrated to collect metrics
 - Micrometer Prometheus registry
 - Dedicated management ports for services
 - Prometheus scrape configuration
+- Grafana service on port `3000`
+- Provisioned Prometheus datasource in Grafana
+- Preloaded dashboard: `Microservices Observability Overview`
 
 - `gateway-service:7071/actuator/prometheus`
 - `customer-service:7073/actuator/prometheus`
 - `order-service:7075/actuator/prometheus`
 - `payment-service:7077/actuator/prometheus`
 - `product-service:7079/actuator/prometheus`
+
+## Grafana Dashboard
+
+Grafana is available at [http://localhost:3000](http://localhost:3000) with the default credentials `admin` / `admin`.
+
+The provisioned dashboard is `Microservices Observability Overview` in the `Microservices Observability` folder.
+
+It currently includes these panels:
+
+- `Healthy Services`
+- `Total Throughput`
+- `5xx Error Rate`
+- `Average API Latency`
+- `Service Availability`
+- `Request Rate by Service`
+- `Average API Latency by Service`
+- `5xx Error Rate by Service`
+- `Top Endpoints by Throughput`
+- `Slowest Endpoints by Average Latency`
+- `JVM Heap Used`
+- `Process CPU Usage`
+- `GC Pause Time per Second`
+- `DB Pool Active Utilization`
 
 ## Run
 
@@ -33,10 +60,11 @@ docker compose up --build -d
 ```
 
 Prometheus: [http://localhost:9090](http://localhost:9090)
+Grafana: [http://localhost:3000](http://localhost:3000)
 
 ## Next Observability Steps
 
-- Grafana dashboards
+- More Grafana dashboards
 - Distributed tracing
 - Alerting rules
 - Centralized logging

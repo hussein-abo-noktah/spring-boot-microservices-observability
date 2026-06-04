@@ -12,3 +12,4 @@ volumes:
   pgadmin:
   mongo:
   prometheus_data:
+  grafana_data:
