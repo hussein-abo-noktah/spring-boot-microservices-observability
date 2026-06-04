@@ -17,3 +17,35 @@ eureka:
 
 server:
   port: 8092
+
+management:
+  server:
+    port: 7077
+
+  endpoints:
+    web:
+      exposure:
+        include: "health, info, metrics, prometheus"
+
+
+  endpoint:
+    health:
+      show-components: when_authorized
+      probes:
+        enabled: true
+      access: read_only
+  info:
+    env:
+      enabled: true
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Payment Service for microservices system Observability
+    version: 1.0.0
+    owner: Hussein Abo Noktah

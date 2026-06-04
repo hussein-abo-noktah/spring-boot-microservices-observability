@@ -14,3 +14,36 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka}
+
+
+management:
+  server:
+    port: 7073
+
+  endpoints:
+    web:
+      exposure:
+        include: "health, info, metrics, prometheus"
+
+
+  endpoint:
+    health:
+      show-components: when_authorized
+      probes:
+        enabled: true
+      access: read_only
+  info:
+    env:
+      enabled: true
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Customer Service for microservices system Observability
+    version: 1.0.0
+    owner: Hussein Abo Noktah

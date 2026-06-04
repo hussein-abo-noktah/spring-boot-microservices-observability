@@ -1,0 +1,19 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.11.3
+    container_name: prometheus_container
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./../observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
+    depends_on:
+      - gateway-service
+      - order-service
+      - customer-service
+      - payment-service
+      - product-service
+    networks:
+      - microservices-observability-net
+    restart: unless-stopped
