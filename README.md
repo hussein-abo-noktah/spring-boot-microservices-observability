@@ -90,8 +90,6 @@ Grafana: [http://localhost:3000](http://localhost:3000)
 
 ## Next Observability Steps
 
-- More Grafana dashboards
-- Distributed tracing
-- Alerting rules
 - Centralized logging
 - Custom business metrics
+- Alerting rules
