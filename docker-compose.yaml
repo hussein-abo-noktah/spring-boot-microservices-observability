@@ -13,3 +13,4 @@ volumes:
   mongo:
   prometheus_data:
   grafana_data:
+  tempo_data:

@@ -22,7 +22,10 @@ So far, the services are created and Prometheus is integrated to collect metrics
 - Prometheus scrape configuration
 - Grafana service on port `3000`
 - Provisioned Prometheus datasource in Grafana
+- Provisioned Tempo datasource in Grafana
 - Preloaded dashboard: `Microservices Observability Overview`
+- Preloaded dashboard: `Tempo Trace Explorer`
+- Preloaded dashboard: `Tempo Trace Statistics`
 
 - `gateway-service:7071/actuator/prometheus`
 - `customer-service:7073/actuator/prometheus`
@@ -34,7 +37,11 @@ So far, the services are created and Prometheus is integrated to collect metrics
 
 Grafana is available at [http://localhost:3000](http://localhost:3000) with the default credentials `admin` / `admin`.
 
-The provisioned dashboard is `Microservices Observability Overview` in the `Microservices Observability` folder.
+The provisioned dashboards are in the `Microservices Observability` folder:
+
+- `Microservices Observability Overview`
+- `Tempo Trace Explorer`
+- `Tempo Trace Statistics`
 
 It currently includes these panels:
 
@@ -52,6 +59,25 @@ It currently includes these panels:
 - `Process CPU Usage`
 - `GC Pause Time per Second`
 - `DB Pool Active Utilization`
+
+The Tempo dashboard includes these tracing views:
+
+- `Recent Traces`
+- `Error Traces`
+- `Slow Traces`
+- `Selected Trace`
+
+The trace statistics dashboard includes:
+
+- `Traced Request Rate`
+- `Recent Traces`
+- `Slow Traces`
+- `Error Traces`
+- `Trace Count by Service`
+- `Slow Trace Count by Service`
+- `Trace Rate by Service`
+- `Most Recent Traces`
+- `Most Recent Slow Traces`
 
 ## Run
 
