@@ -11,6 +11,7 @@ public class RestClientConfiguration {
 
     @Bean
     public RestClient restClient(
+            RestClient.Builder builder,
             @Value("${application.http.connect-timeout-ms:3000}") int connectTimeoutMs,
             @Value("${application.http.read-timeout-ms:5000}") int readTimeoutMs
     ) {
@@ -19,7 +20,7 @@ public class RestClientConfiguration {
         requestFactory.setConnectTimeout(connectTimeoutMs);
         requestFactory.setReadTimeout(readTimeoutMs);
 
-        return RestClient.builder()
+        return builder
                 .requestFactory(requestFactory)
                 .build();
     }
