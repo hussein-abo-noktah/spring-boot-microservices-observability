@@ -6,4 +6,11 @@ spring:
     import: optional:configserver:http://config-server:8888/
 
 
+management:
+    logging:
+      export:
+        enabled: true
 
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
