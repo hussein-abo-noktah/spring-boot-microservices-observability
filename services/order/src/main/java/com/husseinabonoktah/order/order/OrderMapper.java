@@ -2,6 +2,8 @@ package com.husseinabonoktah.order.order;
 
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class OrderMapper {
 
@@ -12,7 +14,7 @@ public class OrderMapper {
     }
     return Order.builder()
         .id(request.id())
-        .reference(request.reference())
+        .reference(request.reference() != null ? request.reference() : UUID.randomUUID().toString())
         .totalAmount(request.amount())
         .paymentMethod(request.paymentMethod())
         .customerId(request.customerId())

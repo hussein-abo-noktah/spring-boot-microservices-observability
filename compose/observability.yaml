@@ -35,3 +35,33 @@ services:
     networks:
       - microservices-observability-net
     restart: unless-stopped
+
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel_collector_container
+    command: ["--config=/etc/otel-collector.yml"]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./../observability/otel-collector/otel-collector.yml:/etc/otel-collector.yml
+    depends_on:
+      - tempo
+    networks:
+      - microservices-observability-net
+    restart: unless-stopped
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo_container
+    command: [ "-config.file=/etc/tempo.yml" ]
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./../observability/tempo/tempo.yml:/etc/tempo.yml
+      - tempo_data:/var/tempo
+    networks:
+      - microservices-observability-net
+    restart: unless-stopped
+

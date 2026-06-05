@@ -12,12 +12,16 @@ spring:
 
   flyway:
     baseline-on-migrate: false
+  cloud:
+    openfeign:
+      micrometer:
+        enabled: true
 
 application:
   config:
-    customer-url: http://customer-service:8090/
-    product-url: http://product-service:8063/
-    payment-url: http://payment-service:8092/
+    customer-url: http://customer-service:8090/api/v1/customers
+    product-url: http://product-service:8063/api/v1/products
+    payment-url: http://payment-service:8092/api/v1/payments
   http:
     connect-timeout-ms: 3000
     read-timeout-ms: 5000
@@ -57,6 +61,20 @@ management:
     tags:
       application: ${spring.application.name}
 
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+  tracing:
+    sampling:
+      probability: 1.0  # collect all traces, 0.1 collect 10% of traces
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-collector:4318/v1/traces
 
 info:
   app:

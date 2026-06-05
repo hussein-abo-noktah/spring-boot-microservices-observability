@@ -4,11 +4,11 @@ spring:
     username: root
     password: secret
     driver-class-name: org.postgresql.Driver
-    jpa:
-      hibernate:
-        ddl-auto: validate
-      database: postgresql
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 eureka:
   client:
@@ -41,6 +41,22 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+
+  tracing:
+    sampling:
+      probability: 1.0  # collect all traces, 0.1 collect 10% of traces
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-collector:4318/v1/traces
 
 
 info:

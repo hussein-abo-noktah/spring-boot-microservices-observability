@@ -2,7 +2,7 @@
 
 This project is a Spring Boot microservices playground for building a complete observability stack step by step.
 
-So far, the services are created and Prometheus is integrated to collect metrics from the system.
+So far, the services are created and the observability stack includes Prometheus for metrics plus OpenTelemetry and an OTLP collector for distributed tracing.
 
 ## Services
 
@@ -10,6 +10,8 @@ So far, the services are created and Prometheus is integrated to collect metrics
 - Discovery Service
 - Gateway Service
 - Customer, Product, Order, and Payment services
+- OpenTelemetry Collector
+- Tempo
 - Prometheus
 - Grafana
 - PostgreSQL and MongoDB
@@ -18,11 +20,19 @@ So far, the services are created and Prometheus is integrated to collect metrics
 
 - Spring Boot Actuator
 - Micrometer Prometheus registry
+- Spring Boot OpenTelemetry tracing
+- OTLP trace export from services to the collector
+- OpenTelemetry Collector receiving OTLP on `4317` and `4318`
+- Tempo as the trace backend
 - Dedicated management ports for services
 - Prometheus scrape configuration
 - Grafana service on port `3000`
 - Provisioned Prometheus datasource in Grafana
+- Provisioned Tempo datasource in Grafana
 - Preloaded dashboard: `Microservices Observability Overview`
+- Preloaded dashboard: `Tempo Trace Explorer`
+- Preloaded dashboard: `Tempo Trace Statistics`
+- Verified end-to-end distributed tracing through `gateway-service -> order-service -> customer-service -> product-service -> payment-service`
 
 - `gateway-service:7071/actuator/prometheus`
 - `customer-service:7073/actuator/prometheus`
@@ -34,7 +44,11 @@ So far, the services are created and Prometheus is integrated to collect metrics
 
 Grafana is available at [http://localhost:3000](http://localhost:3000) with the default credentials `admin` / `admin`.
 
-The provisioned dashboard is `Microservices Observability Overview` in the `Microservices Observability` folder.
+The provisioned dashboards are in the `Microservices Observability` folder:
+
+- `Microservices Observability Overview`
+- `Tempo Trace Explorer`
+- `Tempo Trace Statistics`
 
 It currently includes these panels:
 
@@ -53,6 +67,25 @@ It currently includes these panels:
 - `GC Pause Time per Second`
 - `DB Pool Active Utilization`
 
+The Tempo dashboard includes these tracing views:
+
+- `Recent Traces`
+- `Error Traces`
+- `Slow Traces`
+- `Selected Trace`
+
+The trace statistics dashboard includes:
+
+- `Traced Request Rate`
+- `Recent Traces`
+- `Slow Traces`
+- `Error Traces`
+- `Trace Count by Service`
+- `Slow Trace Count by Service`
+- `Trace Rate by Service`
+- `Most Recent Traces`
+- `Most Recent Slow Traces`
+
 ## Run
 
 ```bash
@@ -61,11 +94,12 @@ docker compose up --build -d
 
 Prometheus: [http://localhost:9090](http://localhost:9090)
 Grafana: [http://localhost:3000](http://localhost:3000)
+Tempo API: [http://localhost:3200](http://localhost:3200)
+OTLP gRPC: `localhost:4317`
+OTLP HTTP: `localhost:4318`
 
 ## Next Observability Steps
 
-- More Grafana dashboards
-- Distributed tracing
-- Alerting rules
 - Centralized logging
 - Custom business metrics
+- Alerting rules
