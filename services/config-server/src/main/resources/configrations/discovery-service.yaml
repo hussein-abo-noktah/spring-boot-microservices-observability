@@ -18,6 +18,9 @@ server:
   port: 8761
 
 logging:
+  structured:
+    format:
+      console: logstash
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   level:

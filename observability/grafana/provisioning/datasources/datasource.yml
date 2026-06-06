@@ -32,3 +32,7 @@ datasources:
           matcherRegex: "\\[[^,]+,([0-9a-fA-F]+),[0-9a-fA-F]+\\]"
           url: "$${__value.raw}"
           datasourceUid: tempo
+        - name: traceIdJson
+          matcherRegex: "\"traceId\":\"([0-9a-fA-F]+)\""
+          url: "$${__value.raw}"
+          datasourceUid: tempo
