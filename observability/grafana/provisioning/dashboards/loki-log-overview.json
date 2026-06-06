@@ -681,11 +681,6 @@
           },
           {
             "selected": false,
-            "text": "otel-collector",
-            "value": "otel-collector"
-          },
-          {
-            "selected": false,
             "text": "tempo",
             "value": "tempo"
           },
@@ -700,7 +695,7 @@
             "value": "alloy"
           }
         ],
-        "query": ".+ , config-server , discovery-service , gateway-service , customer-service , product-service , order-service , payment-service , postgresql , pgadmin , mongodb , mongo-express , prometheus , grafana , otel-collector , tempo , loki , alloy",
+        "query": ".+ , config-server , discovery-service , gateway-service , customer-service , product-service , order-service , payment-service , postgresql , pgadmin , mongodb , mongo-express , prometheus , grafana , tempo , loki , alloy",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -787,11 +782,6 @@
           },
           {
             "selected": false,
-            "text": "otel_collector_container",
-            "value": "otel_collector_container"
-          },
-          {
-            "selected": false,
             "text": "tempo_container",
             "value": "tempo_container"
           },
@@ -806,7 +796,7 @@
             "value": "alloy_container"
           }
         ],
-        "query": ".+ , ms_config-server , ms_discovery-service , ms_gateway-service , ms_customer-service , ms_product-service , ms_order-service , ms_payment-service , ms_postgresql , ms_pgadmin , ms_mongodb , ms_mongo_express , prometheus_container , grafana_container , otel_collector_container , tempo_container , loki_container , alloy_container",
+        "query": ".+ , ms_config-server , ms_discovery-service , ms_gateway-service , ms_customer-service , ms_product-service , ms_order-service , ms_payment-service , ms_postgresql , ms_pgadmin , ms_mongodb , ms_mongo_express , prometheus_container , grafana_container , tempo_container , loki_container , alloy_container",
         "skipUrlSync": false,
         "type": "custom"
       },

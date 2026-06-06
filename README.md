@@ -2,7 +2,7 @@
 
 This project is a Spring Boot microservices playground for building a complete observability stack step by step.
 
-So far, the services are created and the observability stack includes Prometheus for metrics plus OpenTelemetry and an OTLP collector for distributed tracing.
+So far, the services are created and the observability stack includes Prometheus for metrics plus Grafana Alloy and Tempo for distributed tracing.
 
 ## Services
 
@@ -10,7 +10,6 @@ So far, the services are created and the observability stack includes Prometheus
 - Discovery Service
 - Gateway Service
 - Customer, Product, Order, and Payment services
-- OpenTelemetry Collector
 - Tempo
 - Loki
 - Grafana Alloy
@@ -23,11 +22,11 @@ So far, the services are created and the observability stack includes Prometheus
 - Spring Boot Actuator
 - Micrometer Prometheus registry
 - Spring Boot OpenTelemetry tracing
-- OTLP trace export from services to the collector
-- OpenTelemetry Collector receiving OTLP on `4317` and `4318`
+- OTLP trace export from services to Grafana Alloy
+- Grafana Alloy receiving OTLP on `4317` and `4318`
 - Tempo as the trace backend
 - Loki as the centralized log backend
-- Grafana Alloy collecting Docker logs into Loki
+- Grafana Alloy collecting Docker logs into Loki and forwarding traces to Tempo
 - Dedicated management ports for services
 - Prometheus scrape configuration
 - Grafana service on port `3000`
