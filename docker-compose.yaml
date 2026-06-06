@@ -15,3 +15,4 @@ volumes:
   grafana_data:
   tempo_data:
   loki_data:
+  alertmanager_data:

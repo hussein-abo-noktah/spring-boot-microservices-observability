@@ -6,6 +6,7 @@ services:
       - "9090:9090"
     volumes:
       - ./../observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./../observability/prometheus/alerts.yml:/etc/prometheus/alerts.yml
       - prometheus_data:/prometheus
 
     depends_on:
@@ -14,6 +15,7 @@ services:
       - customer-service
       - payment-service
       - product-service
+      - alertmanager
     networks:
       - microservices-observability-net
     restart: unless-stopped
@@ -82,6 +84,21 @@ services:
     depends_on:
       - loki
       - tempo
+    networks:
+      - microservices-observability-net
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager_container
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./../observability/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
     networks:
       - microservices-observability-net
     restart: unless-stopped
