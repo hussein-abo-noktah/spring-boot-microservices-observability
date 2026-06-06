@@ -1,3 +1,9 @@
+spring:
+  main:
+    log-startup-info: false
+    banner:
+      mode: off
+
 eureka:
   instance:
     hostname: discovery-service
@@ -10,4 +16,17 @@ eureka:
 
 server:
   port: 8761
+
+logging:
+  structured:
+    format:
+      console: logstash
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.netflix.discovery: WARN
+    com.husseinabonoktah: INFO
 

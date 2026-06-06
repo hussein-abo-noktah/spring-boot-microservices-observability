@@ -15,3 +15,24 @@ datasources:
     access: proxy
     url: http://tempo:3200
     editable: true
+
+  - name: Loki
+    uid: loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: true
+    jsonData:
+      derivedFields:
+        - name: trace_id
+          matcherRegex: "trace_id=(\\w+)"
+          url: "$${__value.raw}"
+          datasourceUid: tempo
+        - name: traceId
+          matcherRegex: "\\[[^,]+,([0-9a-fA-F]+),[0-9a-fA-F]+\\]"
+          url: "$${__value.raw}"
+          datasourceUid: tempo
+        - name: traceIdJson
+          matcherRegex: "\"traceId\":\"([0-9a-fA-F]+)\""
+          url: "$${__value.raw}"
+          datasourceUid: tempo

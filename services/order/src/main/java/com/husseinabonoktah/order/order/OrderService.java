@@ -11,12 +11,14 @@ import com.husseinabonoktah.order.product.ProductClient;
 import com.husseinabonoktah.order.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 
@@ -31,6 +33,8 @@ public class OrderService {
 
     @Transactional
     public Integer createOrder(OrderRequest request) {
+
+        log.info("Creating order for customerId={}", request.customerId());
         var customer = this.customerClient.findById(request.customerId())
                 .orElseThrow(() -> new BusinessException("Cannot create order:: No customer exists with the provided ID"));
 

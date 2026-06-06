@@ -10,6 +10,11 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  main:
+    log-startup-info: false
+    banner:
+      mode: off
+
   flyway:
     baseline-on-migrate: false
   cloud:
@@ -74,7 +79,25 @@ management:
     tracing:
       export:
         otlp:
-          endpoint: http://otel-collector:4318/v1/traces
+          endpoint: http://alloy:4318/v1/traces
+
+  logging:
+    export:
+      enabled: true
+
+logging:
+  structured:
+    format:
+      console: logstash
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.netflix.discovery: WARN
+    com.husseinabonoktah: INFO
+
 
 info:
   app:

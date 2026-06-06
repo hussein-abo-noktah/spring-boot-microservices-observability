@@ -6,4 +6,3 @@ spring:
     import: optional:configserver:http://config-server:8888/
 
 
-

@@ -23,6 +23,12 @@ spring:
               uri: lb://PRODUCT-SERVICE
               predicates:
                 - Path=/api/v1/products/**
+
+  main:
+    log-startup-info: false
+    banner:
+      mode: off
+      
 server:
   port: 8333
 
@@ -69,7 +75,24 @@ management:
     tracing:
       export:
         otlp:
-          endpoint: http://otel-collector:4318/v1/traces
+          endpoint: http://alloy:4318/v1/traces
+
+  logging:
+    export:
+      enabled: true
+
+logging:
+  structured:
+    format:
+      console: logstash
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.netflix.discovery: WARN
+    com.husseinabonoktah: INFO
 
 
 info:

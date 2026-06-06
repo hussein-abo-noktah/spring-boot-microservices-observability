@@ -1,0 +1,865 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [
+    {
+      "title": "Overview Dashboard",
+      "type": "dashboard",
+      "uid": "microservices-observability-overview"
+    },
+    {
+      "title": "Tempo Trace Explorer",
+      "type": "dashboard",
+      "uid": "tempo-trace-explorer"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "Filter by `service`, `container`, or a regex in `searchRegex` to narrow the log stream. `severityRegex` defaults to all logs, and Grafana can jump from Loki log lines to Tempo when a `traceId` is present in the log pattern.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.0.0",
+      "title": "How To Use",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 4
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({service=~\"$service\",container=~\"$container\"} |~ \"$searchRegex\" [$__range]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Matching Log Lines",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 4
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({service=~\"$service\",container=~\"$container\"} |~ \"(?i)(warn|error|exception)\" |~ \"$searchRegex\" [$__range]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Warn Or Error Lines",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 4
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({service=~\"$service\",container=~\"$container\"} |~ \"(?i)(error|exception)\" |~ \"$searchRegex\" [$__range]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Or Exception Lines",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 4
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate({service=~\"$service\",container=~\"$container\"} |~ \"$searchRegex\" [$__rate_interval]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Current Log Rate",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum by (service) (rate({service=~\"$service\",container=~\"$container\"} |~ \"$searchRegex\" [$__rate_interval]))",
+          "legendFormat": "{{service}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Log Rate By Service",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "sum by (service) (rate({service=~\"$service\",container=~\"$container\"} |~ \"$severityRegex\" |~ \"$searchRegex\" [$__rate_interval]))",
+          "legendFormat": "{{service}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Selected Severity Rate By Service",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 70,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "topk(10, sum by (service) (count_over_time({service=~\"$service\",container=~\"$container\"} |~ \"$searchRegex\" [$__interval])))",
+          "legendFormat": "{{service}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Noisiest Services",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 70,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "topk(10, sum by (container) (count_over_time({service=~\"$service\",container=~\"$container\"} |~ \"$severityRegex\" |~ \"$searchRegex\" [$__interval])))",
+          "legendFormat": "{{container}}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Top Containers For Selected Severity",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 10,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "{service=~\"$service\",container=~\"$container\"} |~ \"$searchRegex\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Recent Matching Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 11,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "{service=~\"$service\",container=~\"$container\"} |~ \"$severityRegex\" |~ \"$searchRegex\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Recent Logs For Selected Severity",
+      "type": "logs"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "tags": [
+    "loki",
+    "logs",
+    "microservices"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": ".+",
+          "value": ".+"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Service",
+        "name": "service",
+        "options": [
+          {
+            "selected": true,
+            "text": ".+",
+            "value": ".+"
+          },
+          {
+            "selected": false,
+            "text": "config-server",
+            "value": "config-server"
+          },
+          {
+            "selected": false,
+            "text": "discovery-service",
+            "value": "discovery-service"
+          },
+          {
+            "selected": false,
+            "text": "gateway-service",
+            "value": "gateway-service"
+          },
+          {
+            "selected": false,
+            "text": "customer-service",
+            "value": "customer-service"
+          },
+          {
+            "selected": false,
+            "text": "product-service",
+            "value": "product-service"
+          },
+          {
+            "selected": false,
+            "text": "order-service",
+            "value": "order-service"
+          },
+          {
+            "selected": false,
+            "text": "payment-service",
+            "value": "payment-service"
+          },
+          {
+            "selected": false,
+            "text": "postgresql",
+            "value": "postgresql"
+          },
+          {
+            "selected": false,
+            "text": "pgadmin",
+            "value": "pgadmin"
+          },
+          {
+            "selected": false,
+            "text": "mongodb",
+            "value": "mongodb"
+          },
+          {
+            "selected": false,
+            "text": "mongo-express",
+            "value": "mongo-express"
+          },
+          {
+            "selected": false,
+            "text": "prometheus",
+            "value": "prometheus"
+          },
+          {
+            "selected": false,
+            "text": "grafana",
+            "value": "grafana"
+          },
+          {
+            "selected": false,
+            "text": "tempo",
+            "value": "tempo"
+          },
+          {
+            "selected": false,
+            "text": "loki",
+            "value": "loki"
+          },
+          {
+            "selected": false,
+            "text": "alloy",
+            "value": "alloy"
+          }
+        ],
+        "query": ".+ , config-server , discovery-service , gateway-service , customer-service , product-service , order-service , payment-service , postgresql , pgadmin , mongodb , mongo-express , prometheus , grafana , tempo , loki , alloy",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ".+",
+          "value": ".+"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Container",
+        "name": "container",
+        "options": [
+          {
+            "selected": true,
+            "text": ".+",
+            "value": ".+"
+          },
+          {
+            "selected": false,
+            "text": "ms_config-server",
+            "value": "ms_config-server"
+          },
+          {
+            "selected": false,
+            "text": "ms_discovery-service",
+            "value": "ms_discovery-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_gateway-service",
+            "value": "ms_gateway-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_customer-service",
+            "value": "ms_customer-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_product-service",
+            "value": "ms_product-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_order-service",
+            "value": "ms_order-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_payment-service",
+            "value": "ms_payment-service"
+          },
+          {
+            "selected": false,
+            "text": "ms_postgresql",
+            "value": "ms_postgresql"
+          },
+          {
+            "selected": false,
+            "text": "ms_pgadmin",
+            "value": "ms_pgadmin"
+          },
+          {
+            "selected": false,
+            "text": "ms_mongodb",
+            "value": "ms_mongodb"
+          },
+          {
+            "selected": false,
+            "text": "ms_mongo_express",
+            "value": "ms_mongo_express"
+          },
+          {
+            "selected": false,
+            "text": "prometheus_container",
+            "value": "prometheus_container"
+          },
+          {
+            "selected": false,
+            "text": "grafana_container",
+            "value": "grafana_container"
+          },
+          {
+            "selected": false,
+            "text": "tempo_container",
+            "value": "tempo_container"
+          },
+          {
+            "selected": false,
+            "text": "loki_container",
+            "value": "loki_container"
+          },
+          {
+            "selected": false,
+            "text": "alloy_container",
+            "value": "alloy_container"
+          }
+        ],
+        "query": ".+ , ms_config-server , ms_discovery-service , ms_gateway-service , ms_customer-service , ms_product-service , ms_order-service , ms_payment-service , ms_postgresql , ms_pgadmin , ms_mongodb , ms_mongo_express , prometheus_container , grafana_container , tempo_container , loki_container , alloy_container",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ".*",
+          "value": ".*"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Severity Regex",
+        "name": "severityRegex",
+        "options": [
+          {
+            "selected": true,
+            "text": ".*",
+            "value": ".*"
+          },
+          {
+            "selected": false,
+            "text": "Warn",
+            "value": "(?i)warn"
+          },
+          {
+            "selected": false,
+            "text": "Error Or Exception",
+            "value": "(?i)(error|exception)"
+          },
+          {
+            "selected": false,
+            "text": "Warn Or Worse",
+            "value": "(?i)(warn|error|exception)"
+          }
+        ],
+        "query": ".* , (?i)warn , (?i)(error|exception) , (?i)(warn|error|exception)",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": ".*",
+          "value": ".*"
+        },
+        "description": "Regex to narrow messages, for example `traceId`, `timeout`, or `ExternalServiceUnavailableException`.",
+        "hide": 0,
+        "label": "Search Regex",
+        "name": "searchRegex",
+        "query": ".*",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Loki Log Overview",
+  "uid": "loki-log-overview",
+  "version": 1,
+  "weekStart": ""
+}

@@ -14,3 +14,4 @@ volumes:
   prometheus_data:
   grafana_data:
   tempo_data:
+  loki_data:
