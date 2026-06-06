@@ -81,7 +81,7 @@ services:
 
   alloy:
     image: grafana/alloy:latest
-    container_name: ms_alloy
+    container_name: alloy_container
     command:
       - run
       - /etc/config.alloy/config.alloy
@@ -95,5 +95,5 @@ services:
     depends_on:
       - loki
     networks:
-      - microservices-net
+      - microservices-observability-net
     restart: unless-stopped
