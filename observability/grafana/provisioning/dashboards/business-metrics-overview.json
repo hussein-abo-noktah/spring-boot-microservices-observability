@@ -65,7 +65,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(business_orders_created_total{application=\"order-service\"})",
+          "expr": "sum(business_orders_total{application=\"order-service\"})",
           "legendFormat": "",
           "range": true,
           "refId": "A"
@@ -561,7 +561,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "60 * sum(rate(business_customers_created_total{application=\"customer-service\"}[$__rate_interval]))",
+          "expr": "60 * sum(rate(business_customers_total{application=\"customer-service\"}[$__rate_interval]))",
           "legendFormat": "Created / min",
           "range": true,
           "refId": "A"
@@ -637,7 +637,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (payment_method) (increase(business_orders_created_total{application=\"order-service\"}[$__range]))",
+          "expr": "sum by (payment_method) (business_orders_total{application=\"order-service\"})",
           "legendFormat": "{{payment_method}}",
           "range": true,
           "refId": "A"
@@ -691,7 +691,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (payment_method) (increase(business_payments_amount_sum{application=\"payment-service\"}[$__range]))",
+          "expr": "sum by (payment_method) (business_payments_amount_sum{application=\"payment-service\"})",
           "legendFormat": "{{payment_method}}",
           "range": true,
           "refId": "A"
