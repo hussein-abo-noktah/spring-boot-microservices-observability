@@ -34,6 +34,7 @@ So far, the services are created and the observability stack includes Prometheus
 - Provisioned Tempo datasource in Grafana
 - Provisioned Loki datasource in Grafana
 - Preloaded dashboard: `Microservices Observability Overview`
+- Preloaded dashboard: `Business Metrics Overview`
 - Preloaded dashboard: `Tempo Trace Explorer`
 - Preloaded dashboard: `Tempo Trace Statistics`
 - Preloaded dashboard: `Loki Log Overview`
@@ -53,6 +54,7 @@ Grafana is available at [http://localhost:3000](http://localhost:3000) with the 
 The provisioned dashboards are in the `Microservices Observability` folder:
 
 - `Microservices Observability Overview`
+- `Business Metrics Overview`
 - `Tempo Trace Explorer`
 - `Tempo Trace Statistics`
 - `Loki Log Overview`
@@ -74,6 +76,32 @@ It currently includes these panels:
 - `Process CPU Usage`
 - `GC Pause Time per Second`
 - `DB Pool Active Utilization`
+
+The business dashboard includes these KPI panels:
+
+- `Orders Created`
+- `Revenue Booked`
+- `Average Order Value`
+- `Payments Processed`
+- `Customer Base`
+- `Catalog Size`
+- `Low Stock Products`
+- `Inventory Units Available`
+- `Revenue Per Minute`
+- `Customer Lifecycle Events`
+- `Orders By Payment Method`
+- `Payment Volume By Method`
+- `Inventory Units Reserved Per Minute`
+- `Inventory Purchase Failures`
+- `Order Failures`
+- `Payment Failures`
+
+The custom business metrics currently cover:
+
+- Order creation totals, failure reasons, order value, and line-item counts
+- Payment processing totals, failure reasons, and payment amounts
+- Product catalog size, low-stock count, available inventory units, and inventory reservation activity
+- Customer base count plus create, update, and delete activity
 
 The Tempo dashboard includes these tracing views:
 
@@ -132,6 +160,6 @@ OTLP HTTP: `localhost:4318`
 
 ## Next Observability Steps
 
-- Custom business metrics
 - Structured JSON logging for richer Loki parsing
 - Alerting rules
+- SLO-style dashboards and alert thresholds for business KPIs

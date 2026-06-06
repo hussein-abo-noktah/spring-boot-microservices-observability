@@ -3,6 +3,7 @@ package com.husseinabonoktah.order.order;
 
 import com.husseinabonoktah.order.customer.CustomerServiceClient;
 import com.husseinabonoktah.order.exception.BusinessException;
+import com.husseinabonoktah.order.observability.OrderBusinessMetrics;
 import com.husseinabonoktah.order.orderitem.OrderItemRequest;
 import com.husseinabonoktah.order.orderitem.OrderItemService;
 import com.husseinabonoktah.order.payment.PaymentRequest;
@@ -30,27 +31,41 @@ public class OrderService {
     private final PaymentServiceClient paymentClient;
     private final ProductClient productClient;
     private final OrderItemService orderItemService;
+    private final OrderBusinessMetrics businessMetrics;
 
     @Transactional
     public Integer createOrder(OrderRequest request) {
 
         log.info("Creating order for customerId={}", request.customerId());
         var customer = this.customerClient.findById(request.customerId())
-                .orElseThrow(() -> new BusinessException("Cannot create order:: No customer exists with the provided ID"));
+                .orElseThrow(() -> {
+                    businessMetrics.recordOrderFailure("customer_missing");
+                    return new BusinessException("Cannot create order:: No customer exists with the provided ID");
+                });
 
-        productClient.purchaseProducts(request.products());
+        try {
+            productClient.purchaseProducts(request.products());
+        } catch (RuntimeException ex) {
+            businessMetrics.recordOrderFailure("inventory_purchase_failed");
+            throw ex;
+        }
 
-        var order = this.repository.save(mapper.toOrder(request));
+        var order = saveOrder(request);
 
-        for (PurchaseRequest purchaseRequest : request.products()) {
-            orderItemService.saveOrderItem(
-                    new OrderItemRequest(
-                            null,
-                            order.getId(),
-                            purchaseRequest.productId(),
-                            purchaseRequest.quantity()
-                    )
-            );
+        try {
+            for (PurchaseRequest purchaseRequest : request.products()) {
+                orderItemService.saveOrderItem(
+                        new OrderItemRequest(
+                                null,
+                                order.getId(),
+                                purchaseRequest.productId(),
+                                purchaseRequest.quantity()
+                        )
+                );
+            }
+        } catch (RuntimeException ex) {
+            businessMetrics.recordOrderFailure("order_item_persistence_failed");
+            throw ex;
         }
         // add payment requests
 
@@ -61,8 +76,24 @@ public class OrderService {
                 order.getReference(),
                 customer
         );
-        paymentClient.requestOrderPayment(paymentRequest);
+        try {
+            paymentClient.requestOrderPayment(paymentRequest);
+        } catch (RuntimeException ex) {
+            businessMetrics.recordOrderFailure("payment_request_failed");
+            throw ex;
+        }
+
+        businessMetrics.recordOrderCreated(request.amount(), request.paymentMethod(), request.products().size());
         return order.getId();
+    }
+
+    private Order saveOrder(OrderRequest request) {
+        try {
+            return this.repository.save(mapper.toOrder(request));
+        } catch (RuntimeException ex) {
+            businessMetrics.recordOrderFailure("order_persistence_failed");
+            throw ex;
+        }
     }
 
     public List<OrderResponse> findAllOrders() {

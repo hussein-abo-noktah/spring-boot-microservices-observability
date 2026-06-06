@@ -1,5 +1,6 @@
 package com.husseinabonoktah.product.product;
 
+import com.husseinabonoktah.product.observability.ProductBusinessMetrics;
 import com.husseinabonoktah.product.exception.ProductPurchaseException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,15 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final ProductMapper mapper;
+    private final ProductBusinessMetrics businessMetrics;
 
     public Integer createProduct(
             ProductRequest request
     ) {
         var product = mapper.toProduct(request);
-        return repository.save(product).getId();
+        var createdProduct = repository.save(product);
+        businessMetrics.recordProductCreated(request.price());
+        return createdProduct.getId();
     }
 
     public ProductResponse findById(Integer id) {
@@ -42,12 +46,24 @@ public class ProductService {
     public List<ProductPurchaseResponse> purchaseProducts(
             List<ProductPurchaseRequest> request
     ) {
+        try {
+            return purchaseAndRecordMetrics(request);
+        } catch (ProductPurchaseException ex) {
+            throw ex;
+        } catch (RuntimeException ex) {
+            businessMetrics.recordInventoryPurchaseFailure("inventory_processing_failed");
+            throw ex;
+        }
+    }
+
+    private List<ProductPurchaseResponse> purchaseAndRecordMetrics(List<ProductPurchaseRequest> request) {
         var productIds = request
                 .stream()
                 .map(ProductPurchaseRequest::productId)
                 .toList();
         var storedProducts = repository.findAllByIdInOrderById(productIds);
         if (productIds.size() != storedProducts.size()) {
+            businessMetrics.recordInventoryPurchaseFailure("products_missing");
             throw new ProductPurchaseException("One or more products does not exist");
         }
         var sortedRequest = request
@@ -59,6 +75,7 @@ public class ProductService {
             var product = storedProducts.get(i);
             var productRequest = sortedRequest.get(i);
             if (product.getAvailableQuantity() < productRequest.quantity()) {
+                businessMetrics.recordInventoryPurchaseFailure("insufficient_stock");
                 throw new ProductPurchaseException("Insufficient stock quantity for product with ID:: " + productRequest.productId());
             }
             var newAvailableQuantity = product.getAvailableQuantity() - productRequest.quantity();
@@ -66,6 +83,10 @@ public class ProductService {
             repository.save(product);
             purchasedProducts.add(mapper.toproductPurchaseResponse(product, productRequest.quantity()));
         }
+        businessMetrics.recordInventoryPurchaseCompleted(
+                request.stream().mapToDouble(ProductPurchaseRequest::quantity).sum(),
+                request.size()
+        );
         return purchasedProducts;
     }
 
