@@ -7,6 +7,12 @@ spring:
     database: customers
     authentication-database: admin
 
+
+  main:
+    log-startup-info: false
+    banner:
+      mode: off
+
 server:
   port: 8090
 
@@ -63,6 +69,12 @@ management:
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.netflix.discovery: WARN
+    com.husseinabonoktah: INFO
 
 info:
   app:

@@ -23,6 +23,12 @@ spring:
               uri: lb://PRODUCT-SERVICE
               predicates:
                 - Path=/api/v1/products/**
+
+  main:
+    log-startup-info: false
+    banner:
+      mode: off
+      
 server:
   port: 8333
 
@@ -78,6 +84,12 @@ management:
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.netflix.discovery: WARN
+    com.husseinabonoktah: INFO
 
 
 info:
