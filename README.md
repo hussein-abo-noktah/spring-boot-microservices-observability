@@ -1,165 +1,136 @@
 # Spring Boot Microservices Observability
 
-This project is a Spring Boot microservices playground for building a complete observability stack step by step.
+![Spring Boot Microservices with the Grafana Stack](assets/readme-banner.png)
 
-So far, the services are created and the observability stack includes Prometheus for metrics plus Grafana Alloy and Tempo for distributed tracing.
+This project is a Spring Boot microservices demo that combines business services with a full Grafana-based observability stack. It shows how to run distributed services with centralized metrics, logs, traces, dashboards, and alerting by using Docker Compose, Spring Cloud, Prometheus, Loki, Tempo, Grafana, and Grafana Alloy.
 
-## Services
+## What This Project Includes
 
-- Config Server
-- Discovery Service
-- Gateway Service
-- Customer, Product, Order, and Payment services
-- Tempo
-- Loki
-- Grafana Alloy
-- Prometheus
-- Grafana
-- PostgreSQL and MongoDB
+- Spring Boot microservices for customer, product, order, and payment flows
+- Spring Cloud Config Server for centralized configuration
+- Eureka Discovery Server for service registration and discovery
+- Spring Cloud Gateway as the single API entry point
+- PostgreSQL and MongoDB for service data storage
+- Prometheus for metrics scraping
+- Loki for centralized log collection
+- Tempo for distributed tracing
+- Grafana Alloy for OTLP trace ingestion and Docker log forwarding
+- Grafana with pre-provisioned datasources and dashboards
+- Alertmanager for Prometheus alert routing
 
-## Observability Status
+## Tools and Services
 
-- Spring Boot Actuator
-- Micrometer Prometheus registry
-- Spring Boot OpenTelemetry tracing
-- OTLP trace export from services to Grafana Alloy
-- Grafana Alloy receiving OTLP on `4317` and `4318`
-- Tempo as the trace backend
-- Loki as the centralized log backend
-- Grafana Alloy collecting Docker logs into Loki and forwarding traces to Tempo
-- Dedicated management ports for services
-- Prometheus scrape configuration
-- Grafana service on port `3000`
-- Provisioned Prometheus datasource in Grafana
-- Provisioned Tempo datasource in Grafana
-- Provisioned Loki datasource in Grafana
-- Preloaded dashboard: `Microservices Observability Overview`
-- Preloaded dashboard: `Business Metrics Overview`
-- Preloaded dashboard: `Tempo Trace Explorer`
-- Preloaded dashboard: `Tempo Trace Statistics`
-- Preloaded dashboard: `Loki Log Overview`
-- Preloaded dashboard: `Loki Trace Correlation`
-- Verified end-to-end distributed tracing through `gateway-service -> order-service -> customer-service -> product-service -> payment-service`
+### Application Services
 
-- `gateway-service:7071/actuator/prometheus`
-- `customer-service:7073/actuator/prometheus`
-- `order-service:7075/actuator/prometheus`
-- `payment-service:7077/actuator/prometheus`
-- `product-service:7079/actuator/prometheus`
+- `config-server`  
+  Centralizes configuration for all Spring Boot services.
 
-## Grafana Dashboard
+- `discovery-service`  
+  Acts as the Eureka registry so services can find each other dynamically.
 
-Grafana is available at [http://localhost:3000](http://localhost:3000) with the default credentials `admin` / `admin`.
+- `gateway-service`  
+  Exposes one entry point for the APIs and routes requests to downstream services.
 
-The provisioned dashboards are in the `Microservices Observability` folder:
+- `customer-service`  
+  Manages customer data stored in MongoDB.
 
-- `Microservices Observability Overview`
-- `Business Metrics Overview`
-- `Tempo Trace Explorer`
-- `Tempo Trace Statistics`
-- `Loki Log Overview`
-- `Loki Trace Correlation`
+- `product-service`  
+  Manages the product catalog and inventory in PostgreSQL.
 
-It currently includes these panels:
+- `order-service`  
+  Handles order creation and coordinates calls to customer, product, and payment services.
 
-- `Healthy Services`
-- `Total Throughput`
-- `5xx Error Rate`
-- `Average API Latency`
-- `Service Availability`
-- `Request Rate by Service`
-- `Average API Latency by Service`
-- `5xx Error Rate by Service`
-- `Top Endpoints by Throughput`
-- `Slowest Endpoints by Average Latency`
-- `JVM Heap Used`
-- `Process CPU Usage`
-- `GC Pause Time per Second`
-- `DB Pool Active Utilization`
+- `payment-service`  
+  Processes payment requests and stores payment data in PostgreSQL.
 
-The business dashboard includes these KPI panels:
+### Databases and Admin Tools
 
-- `Orders Created`
-- `Revenue Booked`
-- `Average Order Value`
-- `Payments Processed`
-- `Customer Base`
-- `Catalog Size`
-- `Low Stock Products`
-- `Inventory Units Available`
-- `Revenue Per Minute`
-- `Customer Lifecycle Events`
-- `Orders By Payment Method`
-- `Payment Volume By Method`
-- `Inventory Units Reserved Per Minute`
-- `Inventory Purchase Failures`
-- `Order Failures`
-- `Payment Failures`
+- `postgresql`  
+  Main relational database used by product, order, and payment services.
 
-The custom business metrics currently cover:
+- `pgadmin`  
+  Web UI for exploring PostgreSQL data.
 
-- Order creation totals, failure reasons, order value, and line-item counts
-- Payment processing totals, failure reasons, and payment amounts
-- Product catalog size, low-stock count, available inventory units, and inventory reservation activity
-- Customer base count plus create, update, and delete activity
+- `mongodb`  
+  NoSQL database used by the customer service.
 
-The Tempo dashboard includes these tracing views:
+- `mongo-express`  
+  Web UI for browsing MongoDB collections.
 
-- `Recent Traces`
-- `Error Traces`
-- `Slow Traces`
-- `Selected Trace`
+### Observability Stack
 
-The trace statistics dashboard includes:
+- `prometheus`  
+  Scrapes Spring Boot Actuator metrics from the services.
 
-- `Traced Request Rate`
-- `Recent Traces`
-- `Slow Traces`
-- `Error Traces`
-- `Trace Count by Service`
-- `Slow Trace Count by Service`
-- `Trace Rate by Service`
-- `Most Recent Traces`
-- `Most Recent Slow Traces`
+- `grafana`  
+  Visualizes metrics, logs, and traces through ready-to-use dashboards.
 
-The Loki overview dashboard includes:
+- `loki`  
+  Stores logs collected from Docker containers.
 
-- `Matching Log Lines`
-- `Warn Or Error Lines`
-- `Error Or Exception Lines`
-- `Current Log Rate`
-- `Log Rate By Service`
-- `Selected Severity Rate By Service`
-- `Noisiest Services`
-- `Top Containers For Selected Severity`
-- `Recent Matching Logs`
-- `Recent Logs For Selected Severity`
+- `tempo`  
+  Stores distributed traces exported by the services.
 
-The Loki trace correlation dashboard includes:
+- `alloy`  
+  Receives OTLP traces from the applications and forwards Docker logs to Loki.
 
-- `Trace Log Lines`
-- `Warn Or Error Lines In Trace`
-- `Current Trace Log Rate`
-- `Trace Log Rate By Service`
-- `Trace Issues By Service`
-- `Logs For Selected Trace`
-- `Issues Inside Selected Trace`
+- `alertmanager`  
+  Receives alerts triggered by Prometheus rules.
 
-## Run
+## API Entry Point
+
+All business APIs are exposed through the gateway on `http://localhost:8333`.
+
+- Customers: `http://localhost:8333/api/v1/customers`
+- Products: `http://localhost:8333/api/v1/products`
+- Orders: `http://localhost:8333/api/v1/orders`
+- Payments: `http://localhost:8333/api/v1/payments`
+
+## How to Run
+
+### Prerequisites
+
+- Docker Desktop or Docker Engine
+- Docker Compose
+
+### Start Everything
 
 ```bash
 docker compose up --build -d
 ```
 
-Prometheus: [http://localhost:9090](http://localhost:9090)
-Grafana: [http://localhost:3000](http://localhost:3000)
-Tempo API: [http://localhost:3200](http://localhost:3200)
-Loki API: [http://localhost:3100](http://localhost:3100)
-OTLP gRPC: `localhost:4317`
-OTLP HTTP: `localhost:4318`
+The first startup can take a few minutes because Docker needs to build the Spring Boot services.
 
-## Next Observability Steps
+### Useful URLs
 
-- Structured JSON logging for richer Loki parsing
-- Alerting rules
-- SLO-style dashboards and alert thresholds for business KPIs
+- Gateway API: [http://localhost:8333](http://localhost:8333)
+- Config Server: [http://localhost:8888](http://localhost:8888)
+- Eureka Discovery: [http://localhost:8761](http://localhost:8761)
+- Grafana: [http://localhost:3000](http://localhost:3000)
+- Prometheus: [http://localhost:9090](http://localhost:9090)
+- Alertmanager: [http://localhost:9093](http://localhost:9093)
+- Tempo API: [http://localhost:3200](http://localhost:3200)
+- Loki API: [http://localhost:3100](http://localhost:3100)
+- pgAdmin: [http://localhost:5050](http://localhost:5050)
+- Mongo Express: [http://localhost:8081](http://localhost:8081)
+
+### Grafana Login
+
+- Username: `admin`
+- Password: `admin`
+
+### Stop Everything
+
+```bash
+docker compose down
+```
+
+## Observability Features
+
+- Prometheus metrics from Spring Boot Actuator endpoints
+- OpenTelemetry trace export from the services
+- Centralized container logs in Loki
+- Distributed traces stored in Tempo
+- Pre-provisioned Grafana datasources
+- Preloaded dashboards for metrics, traces, logs, and business KPIs
+- Prometheus alert rules connected to Alertmanager
