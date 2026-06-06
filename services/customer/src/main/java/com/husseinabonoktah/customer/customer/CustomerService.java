@@ -1,6 +1,7 @@
 package com.husseinabonoktah.customer.customer;
 
 import com.husseinabonoktah.customer.exception.CustomerNotFoundException;
+import com.husseinabonoktah.customer.observability.CustomerBusinessMetrics;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ public class CustomerService {
 
   private final CustomerRepository repository;
   private final CustomerMapper mapper;
+  private final CustomerBusinessMetrics businessMetrics;
 
   public String createCustomer(CustomerRequest request) {
     var customer = this.repository.save(mapper.toCustomer(request));
+    businessMetrics.recordCustomerCreated();
     return customer.getId();
   }
 
@@ -27,6 +30,7 @@ public class CustomerService {
         ));
     mergeCustomer(customer, request);
     this.repository.save(customer);
+    businessMetrics.recordCustomerUpdated();
   }
 
   private void mergeCustomer(Customer customer, CustomerRequest request) {
@@ -60,6 +64,12 @@ public class CustomerService {
   }
 
   public void deleteCustomer(String id) {
+    if (this.repository.existsById(id)) {
+      this.repository.deleteById(id);
+      businessMetrics.recordCustomerDeleted();
+      return;
+    }
+
     this.repository.deleteById(id);
   }
 }
