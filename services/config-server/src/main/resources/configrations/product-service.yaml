@@ -16,8 +16,7 @@ spring:
 
   main:
     log-startup-info: false
-    banner:
-      mode: off
+    banner-mode: off
 
 server:
   port: 8063

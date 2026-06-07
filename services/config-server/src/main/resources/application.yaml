@@ -12,8 +12,7 @@ spring:
           search-locations: classpath:/configrations
   main:
     log-startup-info: false
-    banner:
-      mode: off
+    banner-mode: off
 
 server:
   port: 8888
