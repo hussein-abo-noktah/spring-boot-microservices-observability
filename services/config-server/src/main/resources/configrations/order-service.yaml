@@ -15,8 +15,7 @@ spring:
     banner:
       mode: off
 
-  flyway:
-    baseline-on-migrate: false
+
   cloud:
     openfeign:
       micrometer:
